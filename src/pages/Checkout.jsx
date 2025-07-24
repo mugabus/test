@@ -1,67 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Footer, Navbar } from "../components";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ethers } from "ethers";
+import useMetaMask from "../hooks/useMetaMask"; // 🔗 Import the separated MetaMask hook
 
 const Checkout = () => {
   const state = useSelector((state) => state.handleCart);
 
-  const [walletAddress, setWalletAddress] = useState(null);
-  const [txStatus, setTxStatus] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const connectWallet = async () => {
-    if (!window.ethereum) {
-      return alert("MetaMask not installed!");
-    }
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      setWalletAddress(accounts[0]);
-      setTxStatus("✅ Wallet connected");
-    } catch (err) {
-      console.error(err);
-      setTxStatus("❌ Failed to connect wallet");
-    }
-  };
-
-  const disconnectWallet = () => {
-    setWalletAddress(null);
-    setTxStatus("👋 Wallet disconnected");
-  };
-
-  const handleMetaMaskPayment = async () => {
-    if (!walletAddress || !window.ethereum) {
-      alert("Please connect MetaMask.");
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setTxStatus("🦊 Awaiting confirmation in MetaMask...");
-
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-
-      // Simulated transaction
-      const tx = await signer.sendTransaction({
-        to: walletAddress, // send to self just for testing
-        value: ethers.utils.parseEther("0.001"), // simulate price
-      });
-
-      setTxStatus("⛏️ Transaction pending...");
-      await tx.wait();
-
-      setTxStatus("🎉 Transaction confirmed!");
-    } catch (err) {
-      console.error(err);
-      setTxStatus("❌ Transaction failed or rejected");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // 👇 MetaMask state and methods from the custom hook
+  const {
+    walletAddress,
+    txStatus,
+    isLoading,
+    connectWallet,
+    disconnectWallet,
+    handleMetaMaskPayment,
+  } = useMetaMask();
 
   const EmptyCart = () => (
     <div className="container">
@@ -154,7 +108,7 @@ const Checkout = () => {
               </div>
             </div>
 
-            {/* Billing Address and Credit Card Form */}
+            {/* Billing Form */}
             <div className="col-md-7 col-lg-8">
               <div className="card mb-4">
                 <div className="card-header py-3">
