@@ -7,7 +7,7 @@ This project is a checkout page built using **React**, **Redux**, and **Ethers.j
 ## 🚀 Features
 
 - 🛍️ View dynamic cart items (from Redux store)
-- 📋 Billing address and credit card form (non-functional for now)
+- 📋 Billing address and credit card form (currently non-functional)
 - 🦊 MetaMask integration using Ethers.js
   - Connect / Disconnect wallet
   - Simulate sending a small Ether transaction
@@ -17,3 +17,4 @@ This project is a checkout page built using **React**, **Redux**, and **Ethers.j
 
 ---
 
+I created a Hardhat project to test and verify that the payment functionality works not only in simulation, but also with real transactions using Hardhat accounts imported into MetaMask.
